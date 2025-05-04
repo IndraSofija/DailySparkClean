@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 import os
 import logging
 
-
 # Ielādē .env mainīgos
 load_dotenv()
 
@@ -29,7 +28,6 @@ api_key = os.getenv("OPENAI_API_KEY")
 print("🔐 API key (sākums):", api_key[:10] if api_key else "None")
 
 client = OpenAI()
-
 
 @app.get("/")
 def root():
@@ -60,3 +58,15 @@ async def generate_text(request: Request):
     except Exception as e:
         logging.error(f"⚠️ Kļūda ģenerēšanas laikā: {e}")
         return {"error": str(e)}
+
+@app.get("/test-openai")
+async def test_openai():
+    try:
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": "Hello"}],
+            timeout=10,
+        )
+        return {"status": "OK", "response": response.choices[0].message.content}
+    except Exception as e:
+        return {"status": "FAIL", "error": str(e)}
