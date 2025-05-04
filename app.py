@@ -1,15 +1,15 @@
-from fastapi import FastAPI, Request
-from fastapi.middleware.cors import CORSMiddleware
-from dotenv import load_dotenv
-import openai
 import os
 import logging
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+from openai import OpenAI
+from dotenv import load_dotenv
 
 load_dotenv()
 
 app = FastAPI()
 
-# CORS iestatījumi
+# CORS konfigurācija
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -18,9 +18,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Logging setup
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+# Inicializē OpenAI klientu ar jaunās sintakses atbalstu
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 @app.get("/")
 async def root():
@@ -32,7 +31,7 @@ async def generate_content(request: Request):
     prompt = data.get("prompt", "")
 
     try:
-        response = openai.ChatCompletion.create(
+        response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "user", "content": prompt}
@@ -42,5 +41,5 @@ async def generate_content(request: Request):
         return {"result": result}
     
     except Exception as e:
-        logger.error(f"Kļūda ģenerēšanā: {e}")
+        logging.error(f"Kļūda ģenerēšanā: {e}")
         return {"error": str(e)}
