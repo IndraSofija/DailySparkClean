@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from openai import OpenAI
 from dotenv import load_dotenv
-import openai
 import os
 import logging
 import socket
@@ -28,8 +28,7 @@ logging.basicConfig(level=logging.INFO)
 api_key = os.getenv("OPENAI_API_KEY")
 print("🔐 API key (sākums):", api_key[:10] if api_key else "None")
 
-# Iestata OpenAI API atslēgu
-openai.api_key = api_key
+client = OpenAI()
 
 @app.get("/")
 def root():
@@ -46,7 +45,7 @@ async def generate_text(request: Request):
         if not prompt:
             return {"error": "Prompt is required."}
 
-        chat_completion = openai.ChatCompletion.create(
+        chat_completion = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "user", "content": prompt}
@@ -72,3 +71,4 @@ def network_test():
         return {"status": "SUCCESS", "ip": ip}
     except Exception as e:
         return {"status": "FAIL", "error": str(e)}
+
