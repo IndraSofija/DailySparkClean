@@ -25,3 +25,24 @@ python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 uvicorn app:app --reload
+
+## 🔗 API piekļuves adrese
+
+Tavu backend aplikāciju var sasniegt caur šo adresi:
+
+👉 **https://dailysparkclean-production-74eb.up.railway.app**
+
+- Lai ģenerētu tekstu, sūti POST pieprasījumu uz:
+https://dailysparkclean-production-74eb.up.railway.app/generate
+
+
+- Header:Content-Type: application/json
+
+
+- Body piemērs:
+```json
+{
+  "prompt": "Dod man spēka vārdus šodienai"
+}
+Šo adresi vari izmantot frontendā, testēšanā (piemēram, ar ReqBin vai Postman), kā arī automatizācijā.
+
