@@ -11,7 +11,7 @@ load_dotenv()
 # Inicializē FastAPI
 app = FastAPI()
 
-# Atļaut visus CORS pieprasījumus (frontenda testēšanai)
+# Atļaut visus CORS pieprasījumus
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -23,12 +23,12 @@ app.add_middleware(
 # Logging iestatījumi
 logging.basicConfig(level=logging.INFO)
 
-# 🔐 Debug: pārbaudi, vai API_KEY vispār tiek saņemts
+# 🔐 Debug
 api_key = os.getenv("OPENAI_API_KEY")
 print("🔐 API key (sākums):", api_key[:10] if api_key else "None")
 
-# Inicializē OpenAI klientu
-client = OpenAI(api_key=api_key)
+# JAUNS: inicializē klientu atbilstoši jaunajai sintaksei
+client = OpenAI()
 
 @app.get("/")
 def root():
@@ -45,15 +45,12 @@ async def generate_text(request: Request):
         if not prompt:
             return {"error": "Prompt is required."}
 
-        # ✅ JAUNĀS API SINTAKSES IZMANTOJUMS
-        chat_completion = client.chat.completions.create(
+        response = client.chat.completions.create(
             model="gpt-3.5-turbo",
-            messages=[
-                {"role": "user", "content": prompt}
-            ]
+            messages=[{"role": "user", "content": prompt}]
         )
 
-        result = chat_completion.choices[0].message.content.strip()
+        result = response.choices[0].message.content.strip()
         return {"result": result}
 
     except Exception as e:
