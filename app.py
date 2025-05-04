@@ -1,20 +1,17 @@
-import os
-import logging
-from dotenv import load_dotenv
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from openai import OpenAI
+from dotenv import load_dotenv
+import os
+import logging
 
 # Ielādē .env mainīgos
 load_dotenv()
 
-# Inicializē API klientu
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-
-# Izveido FastAPI instanci
+# Inicializē FastAPI
 app = FastAPI()
 
-# Atļauj piekļuvi no jebkuras vietnes
+# Atļaut visus CORS pieprasījumus (frontenda testēšanai)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -23,24 +20,35 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Testa endpoint
+# Logging iestatījumi
+logging.basicConfig(level=logging.INFO)
+
+# Inicializē OpenAI klientu
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
 @app.get("/")
-async def root():
+def root():
     return {"message": "DailySpark backend is running."}
 
-# Satura ģenerēšanas endpoint
 @app.post("/generate")
-async def generate_content(request: Request):
-    data = await request.json()
-    prompt = data.get("prompt", "")
+async def generate_text(request: Request):
+    logging.info("🚀 API /generate saņemts!")
 
     try:
+        body = await request.json()
+        prompt = body.get("prompt")
+
+        if not prompt:
+            return {"error": "Prompt is required."}
+
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": prompt}]
         )
+
         result = response.choices[0].message.content.strip()
         return {"result": result}
+
     except Exception as e:
-        logging.error(f"Kļūda: {e}")
+        logging.error(f"⚠️ Kļūda ģenerēšanas laikā: {e}")
         return {"error": str(e)}
