@@ -23,8 +23,12 @@ app.add_middleware(
 # Logging iestatījumi
 logging.basicConfig(level=logging.INFO)
 
+# 🔐 Debug: pārbaudi, vai API_KEY vispār tiek saņemts
+api_key = os.getenv("OPENAI_API_KEY")
+print("🔐 API key (sākums):", api_key[:10] if api_key else "None")
+
 # Inicializē OpenAI klientu
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+client = OpenAI(api_key=api_key)
 
 @app.get("/")
 def root():
