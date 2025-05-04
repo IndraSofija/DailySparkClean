@@ -45,13 +45,15 @@ async def generate_text(request: Request):
         if not prompt:
             return {"error": "Prompt is required."}
 
-        # ✅ JAUNĀ SINTAKSE OpenAI >= 1.0.0
-        chat_response = client.chat.completions.create(
+        # ✅ JAUNĀS API SINTAKSES IZMANTOJUMS
+        chat_completion = client.chat.completions.create(
             model="gpt-3.5-turbo",
-            messages=[{"role": "user", "content": prompt}]
+            messages=[
+                {"role": "user", "content": prompt}
+            ]
         )
 
-        result = chat_response.choices[0].message.content.strip()
+        result = chat_completion.choices[0].message.content.strip()
         return {"result": result}
 
     except Exception as e:
