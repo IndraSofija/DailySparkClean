@@ -4,6 +4,7 @@ from openai import OpenAI
 from dotenv import load_dotenv
 import os
 import logging
+import socket
 
 # Ielādē .env mainīgos
 load_dotenv()
@@ -44,7 +45,6 @@ async def generate_text(request: Request):
         if not prompt:
             return {"error": "Prompt is required."}
 
-        # ✅ JAUNĀS API SINTAKSES IZMANTOJUMS
         chat_completion = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
@@ -59,14 +59,15 @@ async def generate_text(request: Request):
         logging.error(f"⚠️ Kļūda ģenerēšanas laikā: {e}")
         return {"error": str(e)}
 
-@app.get("/test-openai")
-async def test_openai():
+# ✅ Tīkla savienojuma pārbaude ar OpenAI API
+@app.get("/network-test")
+def network_test():
     try:
-        response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[{"role": "user", "content": "Hello"}],
-            timeout=10,
-        )
-        return {"status": "OK", "response": response.choices[0].message.content}
+        host = "api.openai.com"
+        port = 443
+        ip = socket.gethostbyname(host)
+        s = socket.create_connection((ip, port), timeout=5)
+        s.close()
+        return {"status": "SUCCESS", "ip": ip}
     except Exception as e:
         return {"status": "FAIL", "error": str(e)}
