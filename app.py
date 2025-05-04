@@ -27,8 +27,8 @@ logging.basicConfig(level=logging.INFO)
 api_key = os.getenv("OPENAI_API_KEY")
 print("🔐 API key (sākums):", api_key[:10] if api_key else "None")
 
-# Inicializē OpenAI klientu
-client = OpenAI(api_key=api_key)
+client = OpenAI()
+
 
 @app.get("/")
 def root():
