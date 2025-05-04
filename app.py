@@ -5,13 +5,6 @@ from dotenv import load_dotenv
 import os
 import logging
 
-import requests
-
-try:
-    response = requests.get("https://api.openai.com/v1/models", timeout=5)
-    print("✅ Railway var sasniegt OpenAI API. Statusa kods:", response.status_code)
-except requests.exceptions.RequestException as e:
-    print("❌ Railway NEVAR sasniegt OpenAI API:", e)
 
 # Ielādē .env mainīgos
 load_dotenv()
