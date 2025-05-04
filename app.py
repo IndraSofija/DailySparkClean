@@ -1,12 +1,19 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from openai import OpenAI
 from dotenv import load_dotenv
+import openai
 import os
 import logging
 
 # Ielādē .env mainīgos
 load_dotenv()
+
+# 🔐 Debug: pārbaudi, vai API_KEY vispār tiek saņemts
+api_key = os.getenv("OPENAI_API_KEY")
+print("🔐 API key (sākums):", api_key[:10] if api_key else "None")
+
+# Inicializē OpenAI klientu — drošā metode (nevis OpenAI(...))
+openai.api_key = api_key
 
 # Inicializē FastAPI
 app = FastAPI()
@@ -23,13 +30,6 @@ app.add_middleware(
 # Logging iestatījumi
 logging.basicConfig(level=logging.INFO)
 
-# 🔐 Debug: pārbaudi, vai API_KEY vispār tiek saņemts
-api_key = os.getenv("OPENAI_API_KEY")
-print("🔐 API key (sākums):", api_key[:10] if api_key else "None")
-
-# Inicializē OpenAI klientu
-client = OpenAI(api_key=api_key)
-
 @app.get("/")
 def root():
     return {"message": "DailySpark backend is running."}
@@ -45,7 +45,7 @@ async def generate_text(request: Request):
         if not prompt:
             return {"error": "Prompt is required."}
 
-        response = client.chat.completions.create(
+        response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": prompt}]
         )
