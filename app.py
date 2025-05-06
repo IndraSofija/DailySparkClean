@@ -72,3 +72,9 @@ def network_test():
     except Exception as e:
         return {"status": "FAIL", "error": str(e)}
 
+@app.get("/reset-daily-sparks")
+def reset_daily_sparks():
+    logging.info("🔁 Daily sparks reset initiated!")
+    # Šeit būtu reāla dzirksteļu atjaunošanas loģika, piemēram:
+    return {"status": "RESET_OK"}
+
