@@ -1,0 +1,10 @@
+{
+  "crons": [
+    {
+      "name": "reset-daily-sparks",
+      "schedule": "1 0 * * *",
+      "url": "https://web-production-e548.up.railway.app/reset-daily-sparks",
+      "method": "GET"
+    }
+  ]
+}
