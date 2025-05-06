@@ -35,9 +35,7 @@ Tavu backend aplikāciju var sasniegt caur šo adresi:
 - Lai ģenerētu tekstu, sūti POST pieprasījumu uz:
 https://dailysparkclean-production-74eb.up.railway.app/generate
 
-
 - Header:Content-Type: application/json
-
 
 - Body piemērs:
 ```json
