@@ -74,6 +74,7 @@ def network_test():
 
 @app.get("/reset-daily-sparks")
 def reset_daily_sparks():
+    print("✅ Cron izpildījās: reset_sparks tika izsaukts!")  # Crone testam
     logging.info("🔁 Daily sparks reset initiated!")
     # Šeit būtu reāla dzirksteļu atjaunošanas loģika, piemēram:
     return {"status": "RESET_OK"}
