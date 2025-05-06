@@ -44,3 +44,7 @@ https://dailysparkclean-production-74eb.up.railway.app/generate
 }
 Šo adresi vari izmantot frontendā, testēšanā (piemēram, ar ReqBin vai Postman), kā arī automatizācijā.
 
+# Wake up commit for Railway cron sync
+Trigger Railway cron activation
+
+
