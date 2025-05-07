@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 import os
 import logging
 import socket
+import time
 
 # Ielādē .env mainīgos
 load_dotenv()
@@ -30,6 +31,9 @@ print("🔐 API key (sākums):", api_key[:10] if api_key else "None")
 
 client = OpenAI()
 
+# Lietotāja pēdējās dzirksteles ģenerēšanas laiks (vienkāršai versijai)
+last_generation_time = {}
+
 @app.get("/")
 def root():
     return {"message": "DailySpark backend is running."}
@@ -44,6 +48,18 @@ async def generate_text(request: Request):
 
         if not prompt:
             return {"error": "Prompt is required."}
+
+        user_id = "default_user"  # Vietturis, vēlāk jāaizstāj ar īstu lietotāju ID
+        current_time = int(time.time())
+        cooldown_seconds = 86400  # 24 stundas
+
+        if user_id in last_generation_time:
+            elapsed = current_time - last_generation_time[user_id]
+            if elapsed < cooldown_seconds:
+                seconds_remaining = cooldown_seconds - elapsed
+                return {"error": f"Spark limit reached. Try again in {seconds_remaining} seconds."}
+
+        last_generation_time[user_id] = current_time
 
         chat_completion = client.chat.completions.create(
             model="gpt-3.5-turbo",
@@ -74,7 +90,6 @@ def network_test():
 
 @app.get("/reset-daily-sparks")
 def reset_daily_sparks():
-    print("✅ Cron izpildījās: reset_sparks tika izsaukts!")  # Crone testam
     logging.info("🔁 Daily sparks reset initiated!")
     # Šeit būtu reāla dzirksteļu atjaunošanas loģika, piemēram:
     return {"status": "RESET_OK"}
