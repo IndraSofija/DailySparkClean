@@ -2,7 +2,7 @@
   "crons": [
     {
       "name": "reset-daily-sparks",
-      "schedule": "*/2 * * * *",
+      "schedule": "0 0 * * *",
       "url": "https://web-production-e548.up.railway.app/reset-daily-sparks",
       "method": "GET"
     }
