@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 import os
 import logging
 import socket
+import time
 from datetime import datetime
 
 # Ielādē .env mainīgos
@@ -31,7 +32,7 @@ print("🔐 API key (sākums):", api_key[:10] if api_key else "None")
 
 client = OpenAI()
 
-# ✅ RAM "datubāze" lietotāja datiem
+# ✅ RAM datubāze dzirksteļu ierobežošanai
 user_data = {}
 
 @app.get("/")
@@ -49,26 +50,54 @@ async def generate_text(request: Request):
 
         if not prompt:
             return {"error": "Prompt is required."}
-
         if not user_id:
             return {"error": "User ID is missing."}
 
         today = datetime.utcnow().date().isoformat()
 
         user_entry = user_data.get(user_id, {
-            "sparks_used_today": 0,
-            "last_reset_date": today
+            "last_reset_date": today,
+            "sparks_used_today": 0
         })
 
-        # Ja ir jauna diena, atiestata skaitītāju
         if user_entry["last_reset_date"] != today:
-            user_entry["sparks_used_today"] = 0
             user_entry["last_reset_date"] = today
+            user_entry["sparks_used_today"] = 0
 
         if user_entry["sparks_used_today"] >= 1:
-            return {"error": "Daily limit reached. Come back tomorrow!"}
+            return {"error": "Spark limit reached. Try again tomorrow."}
 
-        # ✅ Pieaudzina skaitītāju
         user_entry["sparks_used_today"] += 1
         user_data[user_id] = user_entry
 
+        chat_completion = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "user", "content": prompt}
+            ]
+        )
+
+        result = chat_completion.choices[0].message.content.strip()
+        return {"result": result}
+
+    except Exception as e:
+        logging.error(f"⚠️ Kļūda ģenerēšanas laikā: {e}")
+        return {"error": str(e)}
+
+# ✅ Tīkla savienojuma pārbaude ar OpenAI API
+@app.get("/network-test")
+def network_test():
+    try:
+        host = "api.openai.com"
+        port = 443
+        ip = socket.gethostbyname(host)
+        s = socket.create_connection((ip, port), timeout=5)
+        s.close()
+        return {"status": "SUCCESS", "ip": ip}
+    except Exception as e:
+        return {"status": "FAIL", "error": str(e)}
+
+@app.get("/reset-daily-sparks")
+def reset_daily_sparks():
+    logging.info("🔁 Daily sparks reset initiated!")
+    return {"status": "RESET_OK"}
