@@ -90,8 +90,9 @@ async def generate_text(request: Request):
         return {"error": str(e)}
 
         if user_entry["sparks_used_today"] >= 1:
-      
+            return {"error": "Spark limit reached. Try again tomorrow."}
 
+    
     except Exception as e:
         logging.error(f"⚠️ Kļūda ģenerēšanas laikā: {e}")
         return {"error": str(e)}
