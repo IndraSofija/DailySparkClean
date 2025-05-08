@@ -13,10 +13,10 @@ load_dotenv()
 # Inicializē FastAPI
 app = FastAPI()
 
-# Atļaut visus CORS pieprasījumus (frontenda testēšanai)
+# ✅ Atļaut CORS tikai no Vercel frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["https://dailyspark-frontend.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
