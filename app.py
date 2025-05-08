@@ -70,4 +70,5 @@ async def generate_text(request: Request):
 
         # ✅ Pieaudzina skaitītāju
         user_entry["sparks_used_today"] += 1
-        user_data[user_id] =_]()_
+        user_data[user_id] = user_entry
+
