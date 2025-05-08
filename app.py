@@ -45,16 +45,15 @@ async def generate_text(request: Request):
 
     try:
         body = await request.json()
-       niche = body.get("niche")
-prompt = f"Generate a {niche.lower()} inspirational sentence."
-
+        niche = body.get("niche")
+        prompt = f"Generate a {niche.lower()} inspirational sentence."
         user_id = body.get("user_id")
 
-        if not niche:
-    return {"error": "Niche is required."}
+    if not niche:
+        return {"error": "Niche is required."}
 
-        if not user_id:
-            return {"error": "User ID is missing."}
+    if not user_id:
+        return {"error": "User ID is missing."}
 
         today = datetime.utcnow().date().isoformat()
 
