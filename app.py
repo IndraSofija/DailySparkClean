@@ -49,18 +49,17 @@ async def generate_text(request: Request):
         prompt = f"Generate a {niche.lower()} inspirational sentence."
         user_id = body.get("user_id")
 
-    if not niche:
-        return {"error": "Niche is required."}
+        if not niche:
+            return {"error": "Niche is required."}
+        if not user_id:
+            return {"error": "User ID is missing."}
 
-    if not user_id:
-        return {"error": "User ID is missing."}
-
-        today = datetime.utcnow().date().isoformat()
+         today = datetime.utcnow().date().isoformat()
 
         user_entry = user_data.get(user_id, {
             "last_reset_date": today,
             "sparks_used_today": 0
-        })
+         })
 
         if user_entry["last_reset_date"] != today:
             user_entry["last_reset_date"] = today
@@ -81,6 +80,13 @@ async def generate_text(request: Request):
 
         result = chat_completion.choices[0].message.content.strip()
         return {"result": result}
+
+    except Exception as e:
+        logging.error(f"⚠️ Kļūda ģenerēšanas laikā: {e}")
+        return {"error": str(e)}
+
+        if user_entry["sparks_used_today"] >= 1:
+      
 
     except Exception as e:
         logging.error(f"⚠️ Kļūda ģenerēšanas laikā: {e}")
