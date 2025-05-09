@@ -14,7 +14,10 @@ def get_database():
 
 async def get_user_by_id(user_id: str):
     db = get_database()
-    return await db["users"].find_one({"user_id": user_id})
+    print("🔍 Meklējam user_id:", repr(user_id))
+    user = await db["users"].find_one({"user_id": user_id})
+    print("👁️ Mongo rezultāts:", user)
+    return user
 
 def get_spark_collection():
     db = get_database()
