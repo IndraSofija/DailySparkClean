@@ -7,7 +7,7 @@ import os
 router = APIRouter()
 
 # Mongo savienojums
-MONGO_URL = os.getenv("MONGO_URL")
+MONGO_URL = os.getenv("MONGO_URI")
 client = MongoClient(MONGO_URL)
 db = client["daily_spark"]
 saved_sparks = db["saved_sparks"]
