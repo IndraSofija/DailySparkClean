@@ -17,8 +17,8 @@ async def save_spark(data: dict):
         if not user:
             raise HTTPException(status_code=404, detail="User not found")
 
-        collection = await get_spark_collection()
-        spark_data = {
+        collection = get_spark_collection()
+            spark_data = {
             "user_id": user_id,
             "spark_text": spark_text,
             "timestamp": datetime.utcnow()
