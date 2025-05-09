@@ -116,16 +116,9 @@ def reset_daily_sparks():
     return {"status": "RESET_OK"}
 
 # 👉 Reģistrē dzirksteles saglabāšanas maršrutu
-from save_spark import get_spark_collection
+from save_spark import router
+app.include_router(router)
 
-@app.get("/test-save-spark")
-async def test_save_spark():
-    saved_sparks = get_spark_collection()
-    document = {
-        "user_id": "abc123",
-        "spark_text": "Testa dzirkstele no /test-save-spark"
-    }
-    result = saved_sparks.insert_one(document)
-    return {"status": "saved", "id": str(result.inserted_id)}
+
 
 
