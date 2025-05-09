@@ -119,3 +119,14 @@ def reset_daily_sparks():
 from save_spark import router as save_spark_router
 app.include_router(save_spark_router)
 
+@app.get("/test-save-spark")
+async def test_save_spark():
+    from save_spark import saved_sparks
+    document = {
+        "user_id": "abc123",
+        "spark_text": "Testa dzirkstele no /test-save-spark"
+    }
+    result = saved_sparks.insert_one(document)
+    return {"status": "saved", "id": str(result.inserted_id)}
+
+
