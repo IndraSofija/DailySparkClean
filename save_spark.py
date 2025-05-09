@@ -6,31 +6,26 @@ router = APIRouter()
 
 @router.post("/save-spark")
 async def save_spark(data: dict):
-    user_id = data.get("user_id")
-    spark_text = data.get("spark_text")
+    try:
+        user_id = data.get("user_id")
+        spark_text = data.get("spark_text")
 
-    # 1. Validācija: tukšs vai tikai atstarpes
-    if not spark_text or not spark_text.strip():
-        raise HTTPException(status_code=400, detail="Spark text cannot be empty.")
+        if not user_id or not spark_text:
+            raise HTTPException(status_code=400, detail="user_id and spark_text are required")
 
-    # 2. Lietotājs no DB
-    user = await get_user_by_id(user_id)
-    if not user:
-        raise HTTPException(status_code=404, detail="Lietotājs nav atrasts.")
+        user = await get_user_by_id(user_id)
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
 
-    # 3. Tikai Pro drīkst saglabāt
-    if user.get("subscription_level") != "pro":
-        raise HTTPException(status_code=403, detail="Tikai Pro lietotāji var saglabāt dzirksteles.")
+        collection = await get_spark_collection()
+        spark_data = {
+            "user_id": user_id,
+            "spark_text": spark_text,
+            "timestamp": datetime.utcnow()
+        }
 
-    # 4. Saglabā dzirksteli
-    spark_collection = get_spark_collection()
-    insert_result = await spark_collection.insert_one({
-        "user_id": user_id,
-        "spark_text": spark_text,
-        "timestamp": datetime.utcnow()
-    })
+        await collection.insert_one(spark_data)
+        return {"message": "Spark saved successfully"}
 
-    return {
-        "status": "success",
-        "id": str(insert_result.inserted_id)
-    }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
