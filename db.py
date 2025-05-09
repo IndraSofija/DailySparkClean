@@ -15,7 +15,7 @@ def get_database():
 async def get_user_by_id(user_id: str):
     db = get_database()
     print("🔍 Meklējam user_id:", repr(user_id))
-    print("🧪 Rakstzīmju garums:", len(user_id))
+    print("🧮 Rakstzīmju garums:", len(user_id), "| Tips:", type(user_id))
     user = await db["users"].find_one({"user_id": user_id})
     print("👁️ Mongo rezultāts:", user)
     return user
