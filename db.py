@@ -7,7 +7,7 @@ load_dotenv()
 
 MONGO_URI = os.getenv("MONGO_URI")
 client = AsyncIOMotorClient(MONGO_URI)
-database = client["dailyspark"]
+database = client["daily_spark"]
 
 def get_database():
     return database
