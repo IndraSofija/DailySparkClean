@@ -114,3 +114,8 @@ def network_test():
 def reset_daily_sparks():
     logging.info("🔁 Daily sparks reset initiated!")
     return {"status": "RESET_OK"}
+
+# 👉 Reģistrē dzirksteles saglabāšanas maršrutu
+from save_spark import router as save_spark_router
+app.include_router(save_spark_router)
+
