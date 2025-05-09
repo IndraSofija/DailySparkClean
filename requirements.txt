@@ -3,5 +3,6 @@ uvicorn
 python-dotenv
 openai>=1.7.0
 tenacity
+pymongo
 
 
