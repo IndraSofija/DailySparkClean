@@ -53,8 +53,6 @@ async def save_spark(data: dict):
         "status": "success",
         "id": str(insert_result.inserted_id)
     }
-        result = saved_sparks.insert_one(spark)
-        return {"status": "success", "id": str(result.inserted_id)}
-
+    
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Kļūda saglabājot dzirksteli: {str(e)}")
