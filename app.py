@@ -57,7 +57,7 @@ async def generate_text(request: Request):
         # TESTS: pārbaudām, vai Mongo atrod šo user_id ar regex
         from db import get_user_collection
         users_collection = get_user_collection()
-        test_user = users_collection.find_one({ "user_id": { "$regex": f"^{user_id}$", "$options": "i" } })
+        test_user = await users_collection.find_one({ "user_id": { "$regex": f"^{user_id}$", "$options": "i" } })
         print(f"🔍 Testa vaicājums atrada: {test_user}")
 
         today = datetime.utcnow().date().isoformat()
