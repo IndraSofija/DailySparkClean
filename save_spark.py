@@ -10,6 +10,12 @@ async def save_spark(data: dict):
         user_id = data.get("user_id")
         spark_text = data.get("spark_text")
 
+        print(f"🟡 [save_spark] Saņemts user_id: {user_id} | Tips: {type(user_id)}")  # ← PIRMS get_user_by_id
+
+        user = await get_user_by_id(user_id)
+
+        print(f"🟢 [save_spark] Rezultāts no get_user_by_id: {user}")  # ← PĒC get_user_by_id
+
         if not user_id or not spark_text:
             raise HTTPException(status_code=400, detail="user_id and spark_text are required")
 
