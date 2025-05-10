@@ -54,6 +54,12 @@ async def generate_text(request: Request):
         if not user_id:
             return {"error": "User ID is missing."}
 
+        # TESTS: pārbaudām, vai Mongo atrod šo user_id ar regex
+        from db import get_user_collection
+        users_collection = get_user_collection()
+        test_user = users_collection.find_one({ "user_id": { "$regex": f"^{user_id}$", "$options": "i" } })
+        print(f"🔍 Testa vaicājums atrada: {test_user}")
+
         today = datetime.utcnow().date().isoformat()
 
         user_entry = user_data.get(user_id, {
