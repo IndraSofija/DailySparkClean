@@ -5,6 +5,7 @@ openai>=1.7.0
 tenacity
 pymongo
 motor
+stripe>=5.0.0
 
 
 
