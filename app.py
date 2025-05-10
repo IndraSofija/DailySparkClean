@@ -130,6 +130,10 @@ def reset_daily_sparks():
 from save_spark import router
 app.include_router(router)
 
+from checkout import router as checkout_router
+app.include_router(checkout_router)
+
+
 
 
 
