@@ -18,8 +18,8 @@ async def stripe_webhook(request: Request):
     payload = await request.body()
     sig_header = request.headers.get("stripe-signature")
 
-   @router.post("/stripe-webhook")
-   async def stripe_webhook(request: Request):
+@router.post("/stripe-webhook")
+async def stripe_webhook(request: Request):
 
     # Apstrādājam tikai checkout.session.completed
     if event["type"] == "checkout.session.completed":
