@@ -42,7 +42,7 @@ async def save_spark(data: dict):
         await update_user_spark_data(user_id, sparks_used_today=sparks_used + 1)
 
     # Saglabāt dzirksteli
-    spark_collection = await get_spark_collection()
+    spark_collection = get_spark_collection()
     await spark_collection.insert_one({
         "user_id": user_id,
         "spark_text": spark_text,
