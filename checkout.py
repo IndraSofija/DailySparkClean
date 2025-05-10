@@ -13,10 +13,13 @@ stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
 async def create_checkout_session(request: Request):
     try:
         data = await request.json()
-        price_id = data.get("price_id")
+        user_id = data.get("user_id")  # šobrīd neizmanto, bet rezervēts nākotnei
+
+        # 🔐 Noklusētā Stripe cena no .env faila
+        price_id = os.getenv("STRIPE_BASIC_PRICE_ID")
 
         if not price_id:
-            return {"error": "Price ID missing"}
+            return {"error": "Price ID is not configured in environment variables."}
 
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=["card"],
@@ -33,3 +36,4 @@ async def create_checkout_session(request: Request):
 
     except Exception as e:
         return {"error": str(e)}
+
