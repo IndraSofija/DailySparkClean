@@ -23,3 +23,8 @@ async def get_user_by_id(user_id: str):
 def get_spark_collection():
     db = get_database()
     return db["saved_sparks"]
+
+def get_user_collection():
+    db = get_database()
+    return db["users"]
+
