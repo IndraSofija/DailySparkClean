@@ -18,7 +18,11 @@ async def save_spark(data: dict):
 
     today = datetime.utcnow().date()
     last_reset_str = user.get("last_reset_date")
-    last_reset_date = datetime.strptime(last_reset_str, "%Y-%m-%d").date() if last_reset_str else None
+    try:
+        last_reset_date = datetime.strptime(last_reset_str, "%Y-%m-%d").date()
+    except (TypeError, ValueError):
+        last_reset_date = None
+
 
     # Ja nav šodienas datums — reset
     if last_reset_date != today:
