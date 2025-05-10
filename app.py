@@ -48,6 +48,7 @@ async def generate_text(request: Request):
         niche = body.get("niche")
         prompt = f"Generate a {niche.lower()} inspirational sentence."
         user_id = body.get("user_id")
+        print(f"🐾 Saņemtais user_id no pieprasījuma: {user_id}")
 
         if not niche:
             return {"error": "Niche is required."}
