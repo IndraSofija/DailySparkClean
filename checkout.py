@@ -32,6 +32,7 @@ async def create_checkout_session(request: Request):
             mode="subscription",  # Vai "payment" ja nav abonements
             success_url="https://dailyspark-frontend.vercel.app/success?session_id={CHECKOUT_SESSION_ID}",
             cancel_url="https://dailyspark-frontend.vercel.app/cancel",
+            client_reference_id=user_id,
         )
 
         return {"checkout_url": checkout_session.url}
