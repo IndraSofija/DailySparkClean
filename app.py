@@ -8,6 +8,7 @@ import socket
 import time
 from datetime import datetime
 from get_saved_sparks import router as get_saved_sparks_router
+from user_info import user_info
 
 # Ielādē .env mainīgos
 load_dotenv()
@@ -126,6 +127,10 @@ def network_test():
 def reset_daily_sparks():
     logging.info("🔁 Daily sparks reset initiated!")
     return {"status": "RESET_OK"}
+
+@app.get("/user-info")
+async def get_user_info(request: Request):
+    return await user_info(request)
 
 # 👉 Reģistrē dzirksteles saglabāšanas maršrutu
 from save_spark import router
