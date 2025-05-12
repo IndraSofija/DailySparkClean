@@ -9,6 +9,7 @@ import time
 from datetime import datetime
 from get_saved_sparks import router as get_saved_sparks_router
 from user_info import user_info
+from stripe_webhook import router as stripe_webhook_router
 
 # Ielādē .env mainīgos
 load_dotenv()
@@ -142,6 +143,8 @@ app.include_router(checkout_router)
 from stripe_webhook import router as stripe_router
 app.include_router(stripe_router)
 app.include_router(get_saved_sparks_router)
+app.include_router(stripe_webhook_router)
+
 
 
 
