@@ -13,10 +13,11 @@ async def get_user_sparks(user_id: str):
     cursor = spark_collection.find({"user_id": user_id}).sort("timestamp", -1).limit(100)
     sparks = await cursor.to_list(length=100)
 
-    return [
-        {
-            "text": spark.get("spark_text", ""),
-            "date": spark.get("timestamp", datetime.utcnow()).strftime("%Y-%m-%d %H:%M:%S")
-        }
-        for spark in sparks
-    ]
+  return [
+    {
+        "text": spark.get("spark_text", ""),
+        "date": spark.get("timestamp").strftime("%Y-%m-%d %H:%M:%S") if spark.get("timestamp") else "Nav datuma"
+    }
+    for spark in sparks
+]
+
