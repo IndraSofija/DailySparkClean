@@ -11,7 +11,7 @@ from datetime import datetime
 from get_saved_sparks import router as get_saved_sparks_router
 from user_info import user_info
 from stripe_webhook import router as stripe_webhook_router
-from routes.fix_timestamps import router as fix_timestamps_router
+from fix_timestamps import router as fix_timestamps_router
 app.include_router(fix_timestamps_router)
 
 # Ielādē .env mainīgos
